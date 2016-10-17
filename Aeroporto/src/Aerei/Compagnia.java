@@ -1,6 +1,7 @@
 package Aerei;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -12,6 +13,9 @@ public class Compagnia {
 	private AeroportiMondo aeroportiCompagnia=new AeroportiMondo();
 	private Map<String,Integer> aereiCompagnia= new TreeMap<String,Integer>();
 	private Map<String,Volo> voliCompagnia = new TreeMap<String,Volo>();
+	
+	public Compagnia(){
+	}
 	
 	public Compagnia(String nome, AeroportiMondo am){
 		this.nomeCompagnia=nome;
@@ -97,6 +101,7 @@ public class Compagnia {
 		v.setPartenza(part);
 		v.setArrivo(arr);
 		v.setGiorno(giorno);
+		v.setPostiLiberi(aereiCompagnia.get(aer));
 		voliCompagnia.put(cod,v);
 		aeroportiCompagnia.getAeroporto(part).getListaArrivi().put(cod, v);
 		aeroportiCompagnia.getAeroporto(arr).getListaPartenze().put(cod, v);
@@ -142,9 +147,7 @@ public class Compagnia {
 		else			
 		{
 			int nposti=postiLiberi(cod) -num;
-			aereiCompagnia.remove(aer);
-			aereiCompagnia.put(aer, nposti);
-			voliCompagnia.get(cod).setAer(aer);
+			voliCompagnia.get(cod).setPostiLiberi(nposti);
 			b= true;
 		}
 		return b;
@@ -157,26 +160,76 @@ public class Compagnia {
 			throw new InvalidCode();
 		}
 		
-		String aer= voliCompagnia.get(cod).getAer();
-		
-		return aereiCompagnia.get(aer);
+		return voliCompagnia.get(cod).getPostiLiberi();
 	}			
 	
 	public void partitoVolo(String cod, int ritardo) throws InvalidCode {
+		
+		if(!voliCompagnia.containsKey(cod))
+		{
+			throw new InvalidCode();
+		}
+		
+		voliCompagnia.get(cod).setRitardop(ritardo);
 	}
 	
 	public void arrivatoVolo(String cod, int ritardo) throws InvalidCode {
+		if(!voliCompagnia.containsKey(cod))
+		{
+			throw new InvalidCode();
+		}
+		
+		voliCompagnia.get(cod).setRitardoa(ritardo);
 	}
 		
 	public List<String> ritardiPartenza() {
-		return null;
+		
+		List<String> lista=new ArrayList<String>();
+		for(Map.Entry v: voliCompagnia.entrySet())
+		{
+			int delay=voliCompagnia.get(v.getKey()).getRitardop();
+			if(delay>15)
+			{
+				lista.add(voliCompagnia.get(v.getKey()).getCod());
+			}
+		}
+		
+		Collections.sort(lista);
+		
+		return lista;
 	}
 	
 	public List<String> ritardiArrivo() {
-		return null;
+		List<String> lista=new ArrayList<String>();
+		for(Map.Entry v: voliCompagnia.entrySet())
+		{
+			int delay=voliCompagnia.get(v.getKey()).getRitardoa();
+			if(delay>15)
+			{
+				lista.add(voliCompagnia.get(v.getKey()).getCod());
+			}
+		}
+		
+		Collections.sort(lista);
+		
+		return lista;
 	}
 	
 	public List<String> voliCritici() {
-		return null;
+		List<String> lista=new ArrayList<String>();
+		for(Map.Entry v: voliCompagnia.entrySet())
+		{
+			int postiTotali=aereiCompagnia.get(voliCompagnia.get(v.getKey()).getAer());
+			int postiLiberi = voliCompagnia.get(v.getKey()).getPostiLiberi();
+			int percent=(int) (postiTotali*0.3);
+			if(postiLiberi>percent)
+			{
+				lista.add(voliCompagnia.get(v.getKey()).getCod());
+			}
+		}
+		
+		Collections.sort(lista);
+		
+		return lista;
 	}
 }

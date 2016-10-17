@@ -7,7 +7,10 @@ public class Volo {
 	private String partenza;
 	private String arrivo;
 	private String giorno;
-	private Compagnia c;
+	private Compagnia c=new Compagnia();
+	private int postiLiberi;
+	private int ritardop;
+	private int ritardoa;
 
 
 	
@@ -83,6 +86,42 @@ public class Volo {
 	public void setC(Compagnia c) {
 		this.c = c;
 	}
+	
+	public int getPostiLiberi() {
+		return postiLiberi;
+	}
+
+
+
+	public void setPostiLiberi(int postiLiberi) {
+		this.postiLiberi = postiLiberi;
+	}
+
+
+
+	public int getRitardop() {
+		return ritardop;
+	}
+
+
+
+	public void setRitardop(int ritardop) {
+		this.ritardop = ritardop;
+	}
+
+
+
+	public int getRitardoa() {
+		return ritardoa;
+	}
+
+
+
+	public void setRitardoa(int ritardoa) {
+		this.ritardoa = ritardoa;
+	}
+
+
 
 	public String toString(){
 		String s=c.getNomeCompagnia()+";"+ cod + ";" + aer + ";" + partenza +";" + arrivo +";" +giorno+ ";"+c.getAereiCompagnia().get(aer);
