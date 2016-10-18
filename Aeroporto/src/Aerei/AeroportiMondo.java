@@ -6,8 +6,7 @@ import java.util.TreeMap;
 public class AeroportiMondo {
 
 	private Map<String,Aeroporto> elencoAeroporti= new TreeMap<String,Aeroporto>();
-	
-	
+		
 	
 	public void addAeroporto(Aeroporto arpt) throws InvalidCode{
 		if(elencoAeroporti.containsKey(arpt.getCode()))

@@ -97,14 +97,14 @@ public class Compagnia {
 		}
 		
 		Volo v=new Volo(cod,aer);
-		v.setC(this);
+		v.setC(Compagnia.this);
 		v.setPartenza(part);
 		v.setArrivo(arr);
 		v.setGiorno(giorno);
 		v.setPostiLiberi(aereiCompagnia.get(aer));
 		voliCompagnia.put(cod,v);
-		aeroportiCompagnia.getAeroporto(part).getListaArrivi().put(cod, v);
-		aeroportiCompagnia.getAeroporto(arr).getListaPartenze().put(cod, v);
+		aeroportiCompagnia.getAeroporto(arr).getListaArrivi().put(cod, v);
+		aeroportiCompagnia.getAeroporto(part).getListaPartenze().put(cod, v);
 	}
 	
 	public void cancelVolo(String cod) throws InvalidCode {
@@ -113,10 +113,8 @@ public class Compagnia {
 			throw new InvalidCode();
 		}
 		Volo v=voliCompagnia.get(cod);
-		Aeroporto ap=aeroportiCompagnia.getAeroporto(v.getPartenza());
-		Aeroporto aa=aeroportiCompagnia.getAeroporto(v.getArrivo());
-		ap.getListaArrivi().remove(cod);
-		aa.getListaPartenze().remove(cod);
+		aeroportiCompagnia.getAeroporto(v.getArrivo()).getListaArrivi().remove(cod);
+		aeroportiCompagnia.getAeroporto(v.getPartenza()).getListaPartenze().remove(cod);
 		voliCompagnia.remove(cod);
 	}
 	
